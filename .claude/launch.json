@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "pixelpals", "runtimeExecutable": "node", "runtimeArgs": ["tools/serve.mjs", "4617"], "port": 4617 }
+  ]
+}

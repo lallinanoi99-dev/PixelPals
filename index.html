@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  // One page serves "/", "/app" and "/app/playground". On a github.io project page the site lives
+  // under "/<repo>/", so set <base> to wherever this index.html is served from, and restore deep
+  // links that 404.html bounced here as ?r=/app/...
+  (function () {
+    var seg = location.hostname.endsWith('github.io') ? location.pathname.split('/')[1] : '';
+    var base = seg ? '/' + seg + '/' : '/';
+    document.write('<base href="' + base + '">');
+    window.PP_BASE = base;
+    var q = new URLSearchParams(location.search);
+    var r = q.get('r');
+    if (r) {
+      q.delete('r');
+      var rest = q.toString();
+      history.replaceState(null, '', base + r.replace(/^\//, '') + (rest ? (r.indexOf('?') < 0 ? '?' : '&') + rest : '') + location.hash);
+    }
+  })();
+</script>
+<title>Pixel Pals — tiny pets, living on-chain</title>
+<meta name="description" content="Hatch a tiny pixel pal on BOT Chain, feed it, play with it, tuck it in — and watch it grow from an egg into an adult. Its art is drawn by the smart contract itself.">
+<meta property="og:title" content="Pixel Pals — tiny pets, living on-chain">
+<meta property="og:description" content="Hatch a pixel pal, care for it every day, and watch it grow. Free to hatch — 677 eggs only.">
+<meta property="og:image" content="assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FBF7F0">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Silkscreen&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ============================== NAV ============================== -->
+<header class="nav" id="nav">
+  <a class="brand" href="./" aria-label="Pixel Pals home">
+    <svg class="brand-egg" viewBox="0 0 8 10" shape-rendering="crispEdges" aria-hidden="true"><path fill="#3A3150" d="M3 0h2v1H3zM2 1h1v1H2zM5 1h1v1H5zM1 2h1v2H1zM6 2h1v2H6zM0 4h1v4H0zM7 4h1v4H7zM1 8h1v1H1zM6 8h1v1H6zM2 9h4v1H2z"/><path fill="#FFC8DD" d="M3 1h2v1H3zM2 2h4v2H2zM1 4h6v4H1zM2 8h4v1H2z"/><path fill="#FF8FB8" d="M2 5h1v1H2zM5 6h1v1H5zM3 3h1v1H3z"/></svg>
+    <span>Pixel Pals</span>
+  </a>
+  <nav class="nav-links" aria-label="Main">
+    <a href="./#story" data-site-link>The story</a>
+    <a href="app/playground" data-route>Playground</a>
+    <a href="./#faq" data-site-link>FAQ</a>
+  </nav>
+  <div class="nav-actions">
+    <button type="button" class="sound-btn" data-sound aria-pressed="true" aria-label="Sound and music" title="Sound and music">
+      <svg viewBox="0 0 12 10" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M0 3h2v4H0zM2 2h1v6H2zM3 1h1v8H3zM4 0h1v10H4z"/><g class="waves"><path fill="currentColor" d="M6 4h1v2H6zM8 2h1v1H8zM9 3h1v4H9zM8 7h1v1H8z"/></g><g class="mute"><path fill="currentColor" d="M7 3h1v1H7zM8 4h1v1H8zM9 5h1v1H9zM10 6h1v1h-1zM10 3h1v1h-1zM9 4h1v1H9zM8 5h1v1H8zM7 6h1v1H7z"/></g></svg>
+    </button>
+    <button type="button" class="pill pill-line" data-connect>Connect wallet</button>
+    <a class="pill pill-ink" href="app" data-route data-hatch-link>Hatch a pal</a>
+  </div>
+</header>
+
+<div class="banner" id="banner" hidden></div>
+
+<main id="main">
+<!-- ============================== WEBSITE ============================== -->
+<div id="site">
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="pal-wall" aria-hidden="true"><div class="pal-wall-track"></div></div>
+    <div class="hero-card">
+      <div class="hero-egg"><img class="px" data-pal="2,0,0,0,0,0,b" alt=""></div>
+      <h1 id="hero-title" class="serif">Tiny pets,<br>living on-chain.</h1>
+      <p>Hatch a pixel pal, care for it every day, and watch it grow. Free to hatch — 677 eggs only.</p>
+      <div class="hero-buttons">
+        <a class="pill pill-line" href="#story"><span class="play-tri" aria-hidden="true"></span> Watch Mochi grow</a>
+        <a class="pill pill-ink" href="app" data-route>Hatch a pal</a>
+      </div>
+      <p class="hero-count">Live count: <b data-total>…</b> / 677 hatched</p>
+    </div>
+    <a class="hero-more" href="#story">meet mochi <span aria-hidden="true">↓</span></a>
+  </section>
+
+  <!-- the story pal that hops from chapter to chapter (desktop) -->
+  <div class="mochi-follow" id="mochi-follow" aria-hidden="true"><img class="px" alt=""></div>
+
+  <div id="story">
+
+  <!-- CHAPTER 01 -->
+  <section class="chapter ch1" data-bg="#FBF7F0" data-mochi="2,0,0,0,1,0">
+    <div class="ch-text">
+      <p class="label">chapter 01 · the egg</p>
+      <h2 class="serif split">An <span class="in-word"><img class="px" data-pal="2,0,0,0,0,0,b" alt=""></span> egg appears.</h2>
+      <p class="story">One quiet morning, a little egg showed up in a wallet. Nobody knew what was inside.</p>
+      <ul class="teach">
+        <li>Free to hatch — you only pay gas</li>
+        <li>677 eggs in total, a nod to chain ID 677</li>
+        <li>Up to 3 pals per wallet</li>
+      </ul>
+    </div>
+    <div class="ch-visual">
+      <div class="cushion-scene">
+        <div class="big-egg wobble"><img class="px" data-pal="2,0,0,0,0,0,b" alt="A pastel pixel egg"></div>
+        <div class="cushion" aria-hidden="true"></div>
+      </div>
+      <div class="eggs-left"><b data-left>…</b><span>eggs left</span></div>
+    </div>
+    <span class="float-px heart" data-speed="-0.4" style="left:8%;top:22%"></span>
+    <span class="float-px star" data-speed="0.3" style="right:10%;top:12%"></span>
+  </section>
+
+  <!-- CHAPTER 02 -->
+  <section class="chapter ch2 flip" data-bg="#E6F8EE" data-mochi="2,1,0,0,1,0">
+    <div class="ch-text">
+      <p class="label">chapter 02 · the surprise</p>
+      <h2 class="serif split">Crack<span class="in-word"><img class="px" data-pal="2,1,0,0,1,0,b" alt=""></span>!</h2>
+      <p class="story">Out came Mochi — strawberry pink, with a tiny bow. Every pal is a surprise.</p>
+      <ul class="teach">
+        <li>3 species · 8 pastel palettes · 4 patterns · 5 accessories</li>
+        <li>Traits are rolled at random the moment you hatch</li>
+      </ul>
+    </div>
+    <div class="ch-visual">
+      <div class="slots" id="story-slots">
+        <div class="slot"><span class="slot-label">species</span><div class="slot-window"><div class="slot-reel" data-final="Blob"></div></div></div>
+        <div class="slot"><span class="slot-label">palette</span><div class="slot-window"><div class="slot-reel" data-final="Strawberry Milk"></div></div></div>
+        <div class="slot"><span class="slot-label">pattern</span><div class="slot-window"><div class="slot-reel" data-final="Plain"></div></div></div>
+        <div class="slot"><span class="slot-label">accessory</span><div class="slot-window"><div class="slot-reel" data-final="Bow"></div></div></div>
+      </div>
+      <div class="reveal-pal"><img class="px" data-pal="2,1,0,0,1,0,b" alt="Mochi as a baby Blob with a bow"></div>
+      <div class="chips"><span>🫧 Blob</span><span>🍓 Strawberry Milk</span><span>◻︎ Plain</span><span>🎀 Bow</span></div>
+    </div>
+    <span class="float-px star" data-speed="0.5" style="left:46%;top:10%"></span>
+    <span class="float-px cloud" data-speed="-0.3" style="right:6%;bottom:12%"></span>
+  </section>
+
+  <!-- CHAPTER 03 (pinned) -->
+  <section class="chapter ch3 pinned" data-bg="#FFF6CF" data-mochi="">
+    <div class="ch-text">
+      <p class="label">chapter 03 · daily care</p>
+      <h2 class="serif split">Breakfast, playtime, <span class="in-word"><img class="px" data-pal="2,1,0,0,1,0,b" alt=""></span> bedtime.</h2>
+      <p class="story">Mochi needed three things every day: a snack, a game, and a good nap.</p>
+      <ul class="teach">
+        <li>Feed · Play · Sleep — once a day each</li>
+        <li>Each one is a tiny transaction on BOT Chain</li>
+        <li>All three in a day = +1 care day</li>
+      </ul>
+    </div>
+    <div class="ch-visual">
+      <div class="mock-device" id="care-demo">
+        <div class="mock-screen">
+          <div class="mock-top"><span class="mock-name">Mochi</span><span class="mock-badge">Baby</span><span class="mock-days">0 / 7 to Teen</span></div>
+          <div class="room mini-room">
+            <div class="room-wall"></div><div class="room-floor"></div>
+            <div class="room-bed"></div><div class="room-bowl"><i></i></div><div class="room-ball"></div>
+            <div class="room-pal"><img class="px" data-pal="2,1,0,0,1,0,b" alt="Mochi"></div>
+            <div class="zzz">z<span>z</span><span>Z</span></div>
+            <div class="room-night"></div>
+          </div>
+          <div class="toast-care">+1 care day 🎉</div>
+        </div>
+        <div class="mock-buttons">
+          <span class="pxbtn b-feed">🍓 Feed</span><span class="pxbtn b-play">🎾 Play</span><span class="pxbtn b-sleep">🌙 Sleep</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 04 (pinned + scrubbed) -->
+  <section class="chapter ch4 pinned flip" data-bg="#EEE6FF" data-mochi="">
+    <div class="ch-text">
+      <p class="label">chapter 04 · growing up</p>
+      <h2 class="serif split">Growing <span class="in-word"><img class="px" data-pal="2,2,0,0,1,0,b" alt=""></span> up.</h2>
+      <p class="story">Day by day, Mochi grew. Egg, baby, teen — and one day, all grown up.</p>
+      <ul class="teach">
+        <li>Baby at 1 care day · Teen at 7 · Adult at 14</li>
+        <li>Stages only go up — the on-chain image changes with them</li>
+      </ul>
+    </div>
+    <div class="ch-visual">
+      <div class="evolve-stage">
+        <div class="evolve-pal">
+          <img class="px st st0" data-pal="2,0,0,0,1,0,b" alt="Egg">
+          <img class="px st st1" data-pal="2,1,0,0,1,0,b" alt="Baby">
+          <img class="px st st2" data-pal="2,2,0,0,1,0,b" alt="Teen">
+          <img class="px st st3" data-pal="2,3,0,0,1,0,b" alt="Adult">
+        </div>
+        <div class="sparkles" aria-hidden="true"></div>
+        <p class="evolve-label" aria-live="polite">Egg</p>
+      </div>
+      <div class="calendar" aria-label="14 care days">
+        <ol></ol>
+        <div class="cal-marks"><span style="--d:1">baby</span><span style="--d:7">teen</span><span style="--d:14">adult</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 05 -->
+  <section class="chapter ch5" data-bg="#DCE3EF" data-mochi="2,2,0,0,1,2">
+    <div class="ch-text">
+      <p class="label">chapter 05 · a rainy day</p>
+      <h2 class="serif split">A rainy <span class="in-word"><img class="px" data-pal="2,2,0,0,1,2,b" alt=""></span> day.</h2>
+      <p class="story">Once, Mochi’s human forgot. Two days passed. A little cloud followed Mochi around. But pals never give up on you.</p>
+      <ul class="teach">
+        <li>Mood is live: 😊 happy · 😐 okay after a missed day · 😢 sad after two</li>
+        <li>Pals never die — one full care day makes them happy again</li>
+      </ul>
+    </div>
+    <div class="ch-visual">
+      <div class="rain-scene">
+        <div class="rainbow" aria-hidden="true"></div>
+        <div class="rain-pal">
+          <img class="px sad" data-pal="2,2,0,0,1,2,b" alt="Mochi, sad under a rain cloud">
+          <img class="px happy" data-pal="2,2,0,0,1,0,b" alt="Mochi, happy again">
+        </div>
+        <div class="snack" aria-hidden="true">🍓</div>
+        <div class="rain" aria-hidden="true"></div>
+      </div>
+    </div>
+    <span class="float-px cloud" data-speed="0.4" style="left:5%;top:14%"></span>
+    <span class="float-px cloud" data-speed="-0.2" style="right:30%;top:6%"></span>
+  </section>
+
+  <!-- CHAPTER 06 -->
+  <section class="chapter ch6 wide" data-bg="#FFE9DA" data-mochi="2,3,0,0,1,0">
+    <div class="ch-text center">
+      <p class="label">chapter 06 · the playground</p>
+      <h2 class="serif split">Making <span class="in-word"><img class="px" data-pal="0,2,4,1,4,0,b" alt=""></span> friends.</h2>
+      <p class="story">Mochi wasn’t alone. In the Playground, hundreds of pals were growing up too.</p>
+    </div>
+    <div class="bento" id="bento">
+      <a class="bento-card c-strawberry big" href="app/playground" data-route><span class="bento-tag">newest</span></a>
+      <a class="bento-card c-sky" href="app/playground" data-route><span class="bento-tag">most cared for</span></a>
+      <a class="bento-card c-butter" href="app/playground" data-route><span class="bento-tag">adult</span></a>
+      <a class="bento-card c-mint" href="app/playground" data-route><span class="bento-tag">teen</span></a>
+      <a class="bento-card c-lavender" href="app/playground" data-route><span class="bento-tag">baby</span></a>
+      <a class="bento-card c-coral wide" href="app/playground" data-route><span class="bento-tag">visit the playground →</span></a>
+    </div>
+    <div class="marquee" aria-label="Pal names"><div class="marquee-track"></div></div>
+  </section>
+
+  <!-- CHAPTER 07 -->
+  <section class="chapter ch7" data-bg="#DDEEFF" data-mochi="2,3,0,0,1,0">
+    <div class="ch-text">
+      <p class="label">chapter 07 · forever</p>
+      <h2 class="serif split">Forever, <span class="in-word"><img class="px" data-pal="1,3,4,0,2,0,b" alt=""></span> on-chain.</h2>
+      <p class="story">Mochi doesn’t live on a server. Every pixel is drawn by a smart contract on BOT Chain — it will be there as long as the chain is.</p>
+      <ul class="teach">
+        <li>tokenURI returns JSON + SVG built by the contract — no IPFS</li>
+        <li>A dynamic NFT: stage and mood redraw themselves</li>
+      </ul>
+    </div>
+    <div class="ch-visual">
+      <div class="unbuild">
+        <svg class="unbuild-svg" viewBox="-2 -3 20 20" shape-rendering="crispEdges" aria-label="Mochi drawn from pixels"></svg>
+        <pre class="code" aria-hidden="true"><code></code></pre>
+      </div>
+    </div>
+    <span class="float-px star" data-speed="0.4" style="left:52%;top:8%"></span>
+  </section>
+
+  <!-- CHAPTER 08: FAQ -->
+  <section class="chapter ch8 faq-chapter" id="faq" data-bg="#FBF7F0" data-mochi="2,3,0,0,1,0">
+    <div class="faq-head">
+      <p class="label">chapter 08 · faq</p>
+      <h2 class="serif split">Questions from the <span class="in-word"><img class="px" data-pal="0,1,5,2,3,0,b" alt=""></span> playground.</h2>
+      <img class="px faq-doodle" data-pal="1,2,1,1,2,0,b" alt="">
+    </div>
+    <ol class="faq">
+      <li><details><summary><span class="n">01</span>Is it free?</summary><p>Yes. Hatching costs nothing — you only pay a tiny bit of gas on BOT Chain. Feeding, playing and sleeping are tiny transactions too.</p></details></li>
+      <li><details><summary><span class="n">02</span>Can my pal die?</summary><p>Never. Pals get a little sad if you forget them, but they always wait for you.</p></details></li>
+      <li><details><summary><span class="n">03</span>What happens if I forget?</summary><p>Miss one day and your pal feels “okay”. Miss two and a little rain cloud appears. One full care day — feed, play and sleep — makes it happy again. Its stage never goes down.</p></details></li>
+      <li><details><summary><span class="n">04</span>How many can I have?</summary><p>Each wallet can hatch up to 3 pals. There are 677 eggs in total.</p></details></li>
+      <li><details><summary><span class="n">05</span>Where is the art stored?</summary><p>Inside the contract. The sprites are stored as compact pixel data, and the contract draws the SVG every time someone asks — no IPFS, no server.</p></details></li>
+      <li><details><summary><span class="n">06</span>Can I sell or gift my pal?</summary><p>Yes — it’s a normal ERC-721 NFT. The new owner keeps caring for it, and its care days stay with it.</p></details></li>
+      <li><details><summary><span class="n">07</span>Is the randomness fair?</summary><p>Traits are rolled with on-chain block data. That is fine for cosmetic traits, but it isn’t secure randomness — nothing valuable depends on it.</p></details></li>
+    </ol>
+  </section>
+
+  <!-- EPILOGUE -->
+  <section class="epilogue" data-bg="#FBF7F0" data-mochi="">
+    <div class="cta-card">
+      <div class="cta-egg wobble"><img class="px" data-pal="0,0,3,3,0,0,b" alt=""></div>
+      <p class="label">epilogue</p>
+      <h2 class="serif split">Your egg is waiting.</h2>
+      <p>Free to hatch. <b data-left>…</b> eggs left.</p>
+      <a class="pill pill-ink" href="app" data-route>Hatch a pal</a>
+      <div class="cta-wave"><img class="px" data-pal="2,3,0,0,1,0,b" alt="Mochi waving goodbye"></div>
+    </div>
+  </section>
+
+  </div><!-- /story -->
+</div><!-- /site -->
+
+<!-- ============================== APP ============================== -->
+<div id="app" hidden></div>
+</main>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="footer">
+  <div class="footer-top">
+    <p class="footer-tag serif">People care. Pals grow.<br>Everyone on BOT Chain.</p>
+    <div class="footer-cols">
+      <div><p class="label">play</p><a href="app" data-route>Hatch a pal</a><a href="app" data-route>My pals</a><a href="app/playground" data-route>Playground</a></div>
+      <div><p class="label">story</p><a href="./#story" data-site-link>Watch Mochi grow</a><a href="./#faq" data-site-link>FAQ</a></div>
+      <div><p class="label">project</p><a data-link="github" target="_blank" rel="noopener">GitHub</a><a data-link="x" target="_blank" rel="noopener">X</a></div>
+      <div class="onchain">
+        <p class="label">on-chain</p>
+        <a class="bot-pill" href="https://botchain.ai" target="_blank" rel="noopener" aria-label="BOT Chain (opens botchain.ai)"><img src="assets/botchain-logo-ink.png" alt="BOT Chain" width="118" height="23"></a>
+        <button type="button" class="mono addr" data-copy-contract title="Copy contract address">chain ID 677 · <span data-contract-short>not deployed yet</span></button>
+        <a class="pill pill-cream" data-explorer target="_blank" rel="noopener">View on explorer ↗</a>
+        <p class="mono live-line"><b data-total>…</b> / 677 hatched</p>
+      </div>
+    </div>
+  </div>
+  <div class="wordmark-wrap">
+    <div class="wordmark" aria-label="pixelpals"></div>
+    <div class="wordmark-mochi" aria-hidden="true"><img class="px" data-pal="2,3,0,0,1,1,b" alt=""><span class="zz">z<i>z</i><i>Z</i></span></div>
+  </div>
+  <div class="footer-bottom mono">
+    <span>© 2026 Pixel Pals</span><span>Drawn entirely on-chain</span><span>Pals never die. A human cares every day.</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+<script type="module" src="assets/main.js"></script>
+</body>
+</html>
